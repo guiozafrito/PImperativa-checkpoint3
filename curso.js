@@ -1,44 +1,37 @@
 const aluno = require('./aluno');
+const estudantes = require('./estudantes');
 
 const curso ={
     disciplina: 'Artes',
     Corteaprovação: 7,
     faltasLimite: 5,
-    listagem: [],
+    listagem: [estudantes.Marcela,estudantes.Mario,estudantes.Beatriz],
+
 adicionarAluno: function(nome,faltas,notas){
- this.listagem.push(aluno.construtor(nome,faltas,notas));
+ this.listagem.push(new aluno.construtor(nome,faltas,notas));
 },
-aprovacao: function(matriculado){
-    const media = aluno.calcularMedia(matriculado);
+aprovacao: function(estudante){
+    const media = aluno.calcularMedia(estudante);
     if (
         media >= this.Corteaprovação &&
-        matriculado.QtdDeFaltas < this.faltasLimite
+        estudante.QtdDeFaltas < this.faltasLimite
     ){ 
         return `O estudante ${aluno.nome} foi aprovado`;
     } else if (
-        matriculado.QtdDeFaltas===this.faltasLimite &&
+        estudante.QtdDeFaltas===this.faltasLimite &&
         media > this.Corteaprovação *1.1
     ){ 
-        return `O estudante ${aluno.nome} foi aprovado`;
+        return `O estudante ${estudante.nome} foi aprovado`;
     }else { 
-        return `O estudante ${aluno.nome} foi reprovado`;
+        return `O estudante ${estudante.nome} foi reprovado`;
     }
 },
 
-   listaAprovado: function(){
-    let todos = [];
-
-    this.listagem.forEach(matriculado => {
-       todos.push(this.aprovacao(aluno)); 
-    });
-    return todos;
+   listaAprovados () {
+   
+    return this.listagem.map ((aluno) => {
+        return this.aprovacao(aluno);
+    })
 }
 }
-
-const aprovados = curso.listaAprovado();
-
-aprovados.forEach(aprovado => {
-    console.log(aprovado);
-});
-
 module.exports = curso;
